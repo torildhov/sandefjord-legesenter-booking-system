@@ -1,18 +1,20 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import db from "../config/db.js";
 
 dotenv.config();
 
-//Authetication middleware to check if the user is authenticated
+// Authentication middleware to check if the user is authenticated
 const authMiddleware = (req, res, next) => {
-  // Extract the token from the cookies
-  const token = req.cookies.token;
+  // Extract the token from the Authorization header
+  const authHeader = req.headers.authorization;
 
-  // Check if token exists
-  if (!token) {
+  // Check if the Authorization header is present and starts with 'Bearer'
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: "No token, authorization denied" });
   }
+
+  // Extract the token from the header
+  const token = authHeader.split(' ')[1];
 
   try {
     // Verify the token

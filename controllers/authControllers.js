@@ -67,7 +67,7 @@ export const registerUser = async (req, res) => {
   }
 };
 
-//LOGIN A USER
+// LOGIN A USER
 export const loginUser = async (req, res) => {
   // Extract email and password from the request body
   let { email, password } = req.body;
@@ -111,36 +111,24 @@ export const loginUser = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    // Set the token as a cookie
-    res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
-
-    // Send a successful login response
-    res.status(200).json({ message: "Login successful" });
+    // Send the token in the response body
+    res.status(200).json({ message: "Login successful", token });
   } catch (error) {
     // Catch any errors that occur during the login process
     console.error("Login error:", error);
-    res
-      .status(500)
-      .json({
-        message: "Internal server error - an error occurred while logging in",
-      });
+    res.status(500).json({
+      message: "Internal server error - an error occurred while logging in",
+    });
   }
 };
 
-//LOGOUT A USER
+// LOGOUT A USER
 export const logoutUser = (req, res) => {
   try {
-    // Check if the JWT token exists
-    const token = req.cookies.token;
-    if (!token) {
-      return res.status(400).json({ message: "No active session found" });
-    }
-
-    // Clear the token
-    res.clearCookie("token");
+    // Clear the token by sending an empty response
     res.status(200).json({ message: "Logout successful." });
   } catch (error) {
     console.error("Logout error:", error);
-    res.status(500).json({ message: "An error occured while logging out." });
+    res.status(500).json({ message: "An error occurred while logging out." });
   }
 };

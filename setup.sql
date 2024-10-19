@@ -29,13 +29,6 @@ CREATE TABLE appointments (
     FOREIGN KEY (doctor_id) REFERENCES doctors(id)
 );
 
-SELECT * FROM doctors;
-
-SELECT * FROM appointments;
-
-SELECT * FROM users;
-
-
 -- ADMIN USER DATA
 -- passord: adminpassword. Hashed with cost factor 10 at https://bcrypt.online
 INSERT INTO users (user_name, email, password, role)
@@ -45,8 +38,8 @@ VALUES ('adminUser', 'admin@sandefjord.legesenter.no', '$2y$10$9oVkXPyTj.nyj.pw3
 -- passord: password. Hashed with cost factor 10 at https://bcrypt.online
 INSERT INTO users (user_name, email, password, role)
 VALUES 
-('Torild', 'torild.hov@gmail.com', '$2a$10$MEh.nIlxMj0zpeXrkR3q0eNN.qaHbpJKHyW/oIKbL7COlvrb22qwi', 'patient'),
-('Viktor', 'viktor.hojman@gmail.com', '$2a$10$xAFJRMNgfBZMDAljfmhm9uG/LN9bfkM4zt5BELGiXRc6DtScxTsri', 'patient');
+('Torild Katrine Hov', 'torild.hov@gmail.com', '$2a$10$MEh.nIlxMj0zpeXrkR3q0eNN.qaHbpJKHyW/oIKbL7COlvrb22qwi', 'patient'),
+('Viktor Hojman', 'viktor.hojman@gmail.com', '$2a$10$xAFJRMNgfBZMDAljfmhm9uG/LN9bfkM4zt5BELGiXRc6DtScxTsri', 'patient');
 
 
 -- DOCTORS DATA
@@ -61,7 +54,7 @@ INSERT INTO doctors (doctor_name, specialisation, availability) VALUES
     ),
     'exceptions', JSON_OBJECT()
     )
-)),
+),
 ('Dr. Bob Smith', 'Pediatrics', JSON_OBJECT(
     'weekly_schedule', JSON_OBJECT(
         'Monday', JSON_ARRAY('08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30'),
@@ -94,9 +87,8 @@ VALUES
 (3, 2, '2024-11-20', '09:00:00', 'booked', 'Wednesday');
 
 
+SELECT * FROM doctors;
 
+SELECT * FROM appointments;
 
-
-
-
-
+SELECT * FROM users;

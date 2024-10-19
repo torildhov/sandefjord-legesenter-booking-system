@@ -112,6 +112,8 @@ The application will start running on port 3000. You can access it by navigating
 ## Usage
 To use the application, make sure the server is running. The default API endpoint is http://localhost:3000. Postman or other API testing tools can be used to interact with the API endpoints.
 
+To access protected endpoints, include the genereated JWT token in the `Authorization` hader as `Bearer <JWT_TOKEN>`, where `<JWT_TOKEN>` is the token can be found in the body of the response from a sucessful login request at the `/api/auth/login` endpoint.
+
 **For example:**
 - To register a new user: POST to `http://localhost:3000/api/auth/register`
 - To view available time slots for booking an appointment for a specific date: GET to `http://localhost:3000/api/appointments`
@@ -121,6 +123,7 @@ For complete information on the available endpoints and their usage, please refe
 ## API Documentation
 ### Authentication and user management
 Allows users to register, login and logout. Users are required to be logged in/authenticated to access all endpoints in the application except for the register and login endpoints.
+
 #### Register a new user (patient)
 
 **Method:** POST
@@ -215,8 +218,11 @@ Login a user.
 ```json
 {
   "message": "Login successful.",
+  "token": "<JWT_TOKEN>"
 }
 ```
+
+**Note:** The token should be included in the `Authorization` header as `Bearer <JWT_TOKEN>` for all subsequent requests to protect endpoints. 
 
 **400 Bad Requests**
 
@@ -284,9 +290,14 @@ Catch error in logging out user.
   "message": "An error occured while logging out."
 }
 ```
+**Note:** When the user is "logged out" the `<JWT_TOKEN>` must be removed from the `Authorization` header from all used endpoints. This is to mimic a real-world scenario where the user's session is terminated and the token is no longer valid.
 
 ### Appointment management (for patients)
 A user/admin must be logged in/authenticated to access the `/appointments` endpoints.
+
+To access protected endpoints, include the genereated JWT token in the `Authorization` hader as `Bearer <JWT_TOKEN>`, where `<JWT_TOKEN>` is the token can be found in the body of the response from a sucessful login request at the `/api/auth/login` endpoint.
+
+For more details on how to add the token in Postman see the [Postman documentation](https://learning.postman.com/docs/sending-requests/authorization/authorization-types/#bearer-token)
 
 #### Fetch avaiable times slots for booking on a specific date
 **Method:** GET
