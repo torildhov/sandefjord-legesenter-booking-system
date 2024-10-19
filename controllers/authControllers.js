@@ -8,7 +8,6 @@ dotenv.config();
 
 //REGISTER A NEW USER
 export const registerUser = async (req, res) => {
-  
   let { user_name, email, password } = req.body;
 
   // Validate input presence
@@ -24,12 +23,16 @@ export const registerUser = async (req, res) => {
   // Validate username (letters and spaces only)
   const usernameRegex = /^[A-Åa-å\s]+$/;
   if (!usernameRegex.test(user_name)) {
-    return res.status(400).json({ message: "Your name must contain letters and spaces only." });
+    return res
+      .status(400)
+      .json({ message: "Your name must contain letters and spaces only." });
   }
 
   // Validate password length
   if (!validator.isLength(password, { min: 8 })) {
-    return res.status(400).json({ message: "Password must be at least 8 characters long" });
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 8 characters long" });
   }
 
   try {
@@ -58,7 +61,9 @@ export const registerUser = async (req, res) => {
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "An error occured while registering the user" });
+    res
+      .status(500)
+      .json({ message: "An error occured while registering the user" });
   }
 };
 
@@ -79,7 +84,9 @@ export const loginUser = async (req, res) => {
 
   try {
     // Query the database to find a user with the provided email
-    const [users] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+    const [users] = await db.query("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
 
     // If no user is found, return an authentication error
     if (users.length === 0) {
@@ -98,9 +105,11 @@ export const loginUser = async (req, res) => {
     }
 
     // Generate a JWT token for the authenticated user
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { userId: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     // Set the token as a cookie
     res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
@@ -110,10 +119,13 @@ export const loginUser = async (req, res) => {
   } catch (error) {
     // Catch any errors that occur during the login process
     console.error("Login error:", error);
-    res.status(500).json({ message: "Internal server error - an error occurred while logging in" });
+    res
+      .status(500)
+      .json({
+        message: "Internal server error - an error occurred while logging in",
+      });
   }
 };
-
 
 //LOGOUT A USER
 export const logoutUser = (req, res) => {
