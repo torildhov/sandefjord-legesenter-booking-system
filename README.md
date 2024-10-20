@@ -1,11 +1,17 @@
-# Sandefjord Legesenter booking system 
+# Sandefjord Legesenter booking system README
+**For a simple guide to test the API endpoints, see the [API Documentation](APIDocumentation.md).**
+
+The following README file proviede a detailed explanation of the project, including the tech stack, installation instructions, usage guidelines and a complete and comprehensive API documentation.
+
+## About the Project
 This project is the backend system of an application that allows for effective appointment booking management at Sandefjord Legesenter. 
 
 
 ## Table of Contents
-- [Sandefjord Legesenter booking system](#sandefjord-legesenter-booking-system)
-  - [Table of Contents](#table-of-contents)
+- [Sandefjord Legesenter booking system README](#sandefjord-legesenter-booking-system-readme)
   - [About the Project](#about-the-project)
+  - [Table of Contents](#table-of-contents)
+  - [About the Project](#about-the-project-1)
     - [Features](#features)
   - [Tech Stack](#tech-stack)
   - [Installation](#installation)
@@ -222,7 +228,7 @@ Login a user.
 }
 ```
 
-**Note:** The token should be included in the `Authorization` header as `Bearer <JWT_TOKEN>` for all subsequent requests to protect endpoints. 
+**Note:** The token should be included in the `Authorization` header as `Bearer <JWT_TOKEN>` for protected endpoints - i.e. `/api/appointments` endpoints and `/api/admin/` endpoints.
 
 **400 Bad Requests**
 
@@ -240,9 +246,16 @@ Validate email format - email must be a valid email address.
 }
 ```
 
+Validate that the user exists in the database based on email.
+```json
+{
+  "message": "Invalid email or password."
+}
+```
+
 **401 Unauthorized**
 
-Validate that the user exists in the database based on email.
+Validate that the password matches the user's password in the database.
 ```json
 {
   "message": "Invalid email or password."
@@ -254,7 +267,7 @@ Validate that the user exists in the database based on email.
 Catch error in logging in user.
 ```json
 {
-  "message": "Internal server error - an error occured while logg in."
+  "message": "An error occured while logg in."
 }
 ```
 #### Logout a user
@@ -275,13 +288,6 @@ Logout a user.
 }
 ```
 **400 Bad Request**
-
-Checks if the JWT token exists.
-```json
-{
-  "message": "No active session found."
-}
-```
 
 **500 Internal Server Error**
 Catch error in logging out user.
@@ -717,6 +723,7 @@ Catch error in deleting the appointment.
 An user with admin role must be logged in and autheticated as both a user and an admin to access the `/admin` endpoints. The admin user is created manually by the database script when the database is created for the first time.
 
 1. Log out from the current user using POST at the `/api/auth/logout` endpoint.
+3. Remove all JWT tokens from the `Athorization` header from all used endpoints. 
 2. Log in using POST at the `/api/auth/login` endpoint with the following body:
 ```json
 {
@@ -724,6 +731,10 @@ An user with admin role must be logged in and autheticated as both a user and an
     "password": "adminpassword"
 }
 ```
+
+To access `/api/admin/` endpoints, include the genereated JWT token in the `Authorization` hader as `Bearer <JWT_TOKEN>`, where `<JWT_TOKEN>` is the token can be found in the body of the response from a sucessful login request at the `/api/auth/login` endpoint.
+
+For more details on how to add the token in Postman see the [Postman documentation](https://learning.postman.com/docs/sending-requests/authorization/authorization-types/#bearer-token)
 
 #### Fetch a list of doctors
 **Method:** GET

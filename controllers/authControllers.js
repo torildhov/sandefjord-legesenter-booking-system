@@ -117,7 +117,7 @@ export const loginUser = async (req, res) => {
     // Catch any errors that occur during the login process
     console.error("Login error:", error);
     res.status(500).json({
-      message: "Internal server error - an error occurred while logging in",
+      message: "An error occurred while logging in",
     });
   }
 };
